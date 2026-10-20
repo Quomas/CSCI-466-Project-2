@@ -1,0 +1,124 @@
+RDT (Alternating-Bit) SAMPLE OUTPUT -- ANNOTATED
+Command: python3 rdtsim_CSCI466.py -n 12 -d 1000 -l 0.1 -c 0.3 -v 2 -s 42
+(loss 0.1, corruption 0.3, trace 2; run covers 10 messages delivered/ACKed at B)
+Lines marked with "<<<" were added to show how the protocol recovered.
+==========================================================================
+SIMULATION CONFIGURATION
+--------------------------------------
+(-n) # layer5 msgs to be provided:      12
+(-d) avg layer5 msg interarrival time:  1000.0
+(-z) transport protocol seqnum limit:   16
+(-l) layer3 packet loss prob:           0.1
+(-c) layer3 packet corruption prob:     0.3
+(-s) simulation random seed:            42
+--------------------------------------
+
+===== SIMULATION BEGINS
+  A [t=1278.85]: sending new packet seq=0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  B [t=1285.27]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=1285.27]: sending NACK 0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  A [t=1286.51]: corrupt response (treated as NACK); retransmitting seq=0  <<< A detects corrupt ACK/NACK, retransmits immediately
+  B [t=1287.72]: good packet seq=0, delivering b'a'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=1287.72]: sending ACK 0
+  A [t=1293.08]: ACK 0 received; ready for next message
+  A [t=1328.88]: sending new packet seq=1
+  B [t=1329.93]: good packet seq=1, delivering b'b'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=1329.93]: sending ACK 1
+  A [t=1333.65]: ACK 1 received; ready for next message
+  A [t=1769.76]: sending new packet seq=0
+  B [t=1771.50]: good packet seq=0, delivering b'c'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=1771.50]: sending ACK 0
+          TO_LAYER3: packet being lost  <<< LOSS: network drops this packet; A must recover via timeout
+  A [t=1799.76]: TIMEOUT  <<< TIMER: no valid reply in time (packet or ACK was lost); A retransmits
+  A [t=1799.76]: retransmitted seq=0
+  B [t=1807.21]: duplicate seq=0, re-ACKing  <<< Duplicate (earlier ACK lost): B re-ACKs, does NOT deliver again
+  B [t=1807.21]: sending ACK 0
+  A [t=1816.00]: ACK 0 received; ready for next message
+  A [t=2080.72]: sending new packet seq=1
+  B [t=2086.66]: good packet seq=1, delivering b'd'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=2086.66]: sending ACK 1
+  A [t=2093.30]: ACK 1 received; ready for next message
+  A [t=2837.78]: sending new packet seq=0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  B [t=2840.65]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=2840.65]: sending NACK 0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  A [t=2844.57]: corrupt response (treated as NACK); retransmitting seq=0  <<< A detects corrupt ACK/NACK, retransmits immediately
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  B [t=2853.06]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=2853.06]: sending NACK 0
+  A [t=2855.43]: NACK 0 received; retransmitting seq=0  <<< A got a NACK for the outstanding packet, retransmits
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  B [t=2864.34]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=2864.34]: sending NACK 0
+  A [t=2870.82]: NACK 0 received; retransmitting seq=0  <<< A got a NACK for the outstanding packet, retransmits
+  B [t=2873.65]: good packet seq=0, delivering b'e'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=2873.65]: sending ACK 0
+          TO_LAYER3: packet being lost  <<< LOSS: network drops this packet; A must recover via timeout
+  A [t=2900.82]: TIMEOUT  <<< TIMER: no valid reply in time (packet or ACK was lost); A retransmits
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  A [t=2900.82]: retransmitted seq=0
+  B [t=2909.36]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=2909.36]: sending NACK 1
+  A [t=2915.61]: stale response for seq=1, ignored  <<< Stale reply ignored
+  A [t=2929.43]: busy, dropping b'f'...
+  A [t=2930.82]: TIMEOUT  <<< TIMER: no valid reply in time (packet or ACK was lost); A retransmits
+  A [t=2930.82]: retransmitted seq=0
+  B [t=2933.94]: duplicate seq=0, re-ACKing  <<< Duplicate (earlier ACK lost): B re-ACKs, does NOT deliver again
+  B [t=2933.94]: sending ACK 0
+  A [t=2937.04]: ACK 0 received; ready for next message
+  A [t=3720.70]: sending new packet seq=1
+  B [t=3723.45]: good packet seq=1, delivering b'g'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=3723.45]: sending ACK 1
+  A [t=3725.18]: ACK 1 received; ready for next message
+  A [t=4889.87]: sending new packet seq=0
+  B [t=4897.21]: good packet seq=0, delivering b'h'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=4897.21]: sending ACK 0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  A [t=4906.17]: corrupt response (treated as NACK); retransmitting seq=0  <<< A detects corrupt ACK/NACK, retransmits immediately
+  B [t=4914.06]: duplicate seq=0, re-ACKing  <<< Duplicate (earlier ACK lost): B re-ACKs, does NOT deliver again
+  B [t=4914.06]: sending ACK 0
+          TO_LAYER3: packet being lost  <<< LOSS: network drops this packet; A must recover via timeout
+  A [t=4936.17]: TIMEOUT  <<< TIMER: no valid reply in time (packet or ACK was lost); A retransmits
+  A [t=4936.17]: retransmitted seq=0
+  B [t=4941.47]: duplicate seq=0, re-ACKing  <<< Duplicate (earlier ACK lost): B re-ACKs, does NOT deliver again
+  B [t=4941.47]: sending ACK 0
+  A [t=4943.36]: ACK 0 received; ready for next message
+  A [t=4984.10]: sending new packet seq=1
+  B [t=4992.11]: good packet seq=1, delivering b'i'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=4992.11]: sending ACK 1
+  A [t=4994.54]: ACK 1 received; ready for next message
+  A [t=5853.63]: sending new packet seq=0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  B [t=5859.50]: corrupt packet received  <<< B detects bad checksum, will NACK
+  B [t=5859.50]: sending NACK 0
+  A [t=5864.82]: NACK 0 received; retransmitting seq=0  <<< A got a NACK for the outstanding packet, retransmits
+  B [t=5865.82]: good packet seq=0, delivering b'j'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=5865.82]: sending ACK 0
+          TO_LAYER3: packet being corrupted  <<< CORRUPTION: payload/seq/ack altered; checksum will no longer match
+  A [t=5868.74]: corrupt response (treated as NACK); retransmitting seq=0  <<< A detects corrupt ACK/NACK, retransmits immediately
+  B [t=5870.37]: duplicate seq=0, re-ACKing  <<< Duplicate (earlier ACK lost): B re-ACKs, does NOT deliver again
+  B [t=5870.37]: sending ACK 0
+  A [t=5879.19]: ACK 0 received; ready for next message
+  A [t=7678.89]: sending new packet seq=1
+  B [t=7687.46]: good packet seq=1, delivering b'k'...  <<< B accepts packet, delivers to layer 5, flips expected bit
+  B [t=7687.46]: sending ACK 1
+  A [t=7693.32]: ACK 1 received; ready for next message
+  A [t=8744.30]: sending new packet seq=0
+===== SIMULATION ENDS
+
+SIMULATION SUMMARY
+--------------------------------
+# layer5 msgs provided to A:      12
+# elapsed time units:             8744.29992529885
+
+# layer3 packets sent by A:       22
+# layer3 packets sent by B:       21
+# layer3 packets lost:            3
+# layer3 packets corrupted:       10
+# layer5 msgs delivered by A:     0
+# layer5 msgs delivered by B:     10
+# layer5 msgs by B/elapsed time:  0.0011436021277207316
+--------------------------------
